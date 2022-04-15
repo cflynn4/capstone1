@@ -1,17 +1,13 @@
 package com.techelevator;
 
 import com.techelevator.view.Menu;
-import com.techelevator.view.Product;
 import com.techelevator.view.MainActions;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.Stack;
 
 public class VendingMachineCLI {
-
+	//We took inspiration from the provided menu, adding additional options for the purchase menu and money menu options.
 	private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
 	private static final String MAIN_MENU_OPTION_PURCHASE = "Purchase";
 	private static final String MAIN_MENU_OPTION_EXIT = "Exit";
@@ -32,14 +28,14 @@ public class VendingMachineCLI {
 
 	private Menu menu;
 
-	private Map<String, Stack<Product>> stockSheet = new HashMap<>();
-
 	public VendingMachineCLI(Menu menu) {
 		this.menu = menu;
 	}
 
 	public void run() {
+		//We used the menu structure that was provided. We call mainActions here as that's where the bulk of our methods are.
 		MainActions mainActions = new MainActions();
+		//createInventory here creates a new stock everytime the code runs, reading from a given file.
 		mainActions.createInventory();
 
 		while (true) {
@@ -51,6 +47,7 @@ public class VendingMachineCLI {
 					BigDecimal balance = mainActions.getBalance();
 					System.out.println("\nCurrent Money Provided: " + balance);
 					String purchaseChoice = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS);
+					//Here is the added purchase menu options. Gets user input that we equate to dollar amounts fed.
 					if (purchaseChoice.equals(PURCHASE_MENU_FEED_MONEY)){
 						String moneyMenuChoice = (String) menu.getChoiceFromOptions(MONEY_MENU_OPTIONS);
 						if (moneyMenuChoice.equals(MONEY_MENU_OPTION_ONE)) {
@@ -65,6 +62,7 @@ public class VendingMachineCLI {
 							mainActions.feedMoney(5);
 						}
 					} else if (purchaseChoice.equals(PURCHASE_MENU_SELECT_PRODUCT)){
+						//Displays inventory, gets user input, runs the purchase method.
 						mainActions.displayInventory();
 						System.out.println("Please enter the item code for the item you wish to purchase!");
 						Scanner selection = new Scanner(System.in);
@@ -72,7 +70,8 @@ public class VendingMachineCLI {
 						mainActions.purchase(userSelection);
 
 					} else if (purchaseChoice.equals(PURCHASE_MENU_FINISH_TRANSACTION)) {
-						System.out.println("Finished transaction!");
+						//completes the transaction. break sends the user back to the main menu.
+						mainActions.completeTransaction();
 						break;
 					}
 				}

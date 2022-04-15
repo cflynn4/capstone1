@@ -1,32 +1,22 @@
 package com.techelevator.view;
 
+import java.math.BigDecimal;
 
 public class Change {
 
-    double balance = 0;
-    double quarter = 0.25;
-    double dime = 0.10;
-    double nickel = 0.05;
-    int quarterCounter = 0;
-    int dimeCounter = 0;
-    int nickelCounter = 0;
 
-    public String dispenseChange() {
-
-        if (balance > 0) {
-            while ((balance - quarter) >= 0) {
-                balance -= quarter;
-                quarterCounter++;
-            }
-            while ((balance - dime) >= 0) {
-                balance -= dime;
-                dimeCounter++;
-            }
-            while ((balance - nickel) >= 0) {
-                balance -= nickel;
-                nickelCounter++;
-            }
-        }
-        return "You receive " + nickelCounter + dimeCounter + quarterCounter;
+    public void dispenseChange(BigDecimal balance) {
+        //dispense changes checks the balance against each change amount, subtracts that change amount, and then moves
+        //on to the subsequent change amount.
+        double changeBalance = (balance.doubleValue() * 100);
+        int quarters = ((int) changeBalance / 25);
+        changeBalance = changeBalance - (quarters * 25);
+        int dime = ((int) changeBalance / 10);
+        changeBalance = changeBalance - (dime * 10);
+        int nickels = ((int) changeBalance / 5);
+        //finally, concatenates the amount of quarters, dime and nickels into a println.
+        System.out.println(
+                "Your change is " + quarters + " quarter(s), " + dime + " dime(s) and " + nickels + " nickel(s). ");
     }
 }
+
