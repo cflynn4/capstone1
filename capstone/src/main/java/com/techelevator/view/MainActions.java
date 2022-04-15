@@ -7,9 +7,10 @@ import java.util.*;
 
 public class MainActions {
 
-    Map<String, Stack<Product>> stockSheet = new HashMap<>();
+    Map<String, List<Product>> stockSheet = new HashMap<>();
     //
-    Stack<Product> inventory;
+    List<Product> inventory;
+    Product product = new Product();
 
     BigDecimal balance = new BigDecimal(0.00).setScale(2);
 
@@ -17,19 +18,19 @@ public class MainActions {
         return balance;
     }
 
-    public Map<String, Stack<Product>> createInventory() {
+    public Map<String, List<Product>> createInventory() {
         File inventoryFile = new File("vendingmachine.csv");
         try (Scanner dataInput = new Scanner(inventoryFile)) {
             //while loop takes each line, splits it to an array, then sets each part of the array as variables that are put into a new product.
             //Product is then put into a stack multiple times to indicate stock. Stack is the value of a map, where the array[0] is the key value, signifying ID.
             while (dataInput.hasNextLine()) {
-                inventory = new Stack<>();
+                inventory = new ArrayList<>();
                 String lineOfInput = dataInput.nextLine();
                 String[] productAttributes = lineOfInput.split("\\|");
                 String name = productAttributes[1];
                 BigDecimal price = new BigDecimal(productAttributes[2]);
                 String type = productAttributes[3];
-                Product product = new Product(name, price, type);
+                product = new Product(name, price, type);
                 Collections.addAll(inventory, product, product, product, product, product);
                 stockSheet.put(productAttributes[0], inventory);
             }
@@ -39,7 +40,7 @@ public class MainActions {
         return stockSheet;
     }
     public void displayInventory(){
-        for(Map.Entry<String, Stack<Product>> kvp : stockSheet.entrySet()){
+        for(Map.Entry<String, List<Product>> kvp : stockSheet.entrySet()){
             System.out.println(kvp.getKey() + ((kvp.getValue().size() == 0) ? "Sold Out!" :  " " + kvp.getValue().get(0).getName() + " " + kvp.getValue().get(0).getPrice()+ " " + kvp.getValue().get(0).getType() + " Remaining Stock: " + kvp.getValue().size()));
         }
     }
@@ -66,8 +67,8 @@ public class MainActions {
             if(inventory.size() == 0){
                 System.out.println("Sorry, the item you selected is out of stock!");
             } else if(inventory.size() >= 1){
-                if(balance.compareTo(inventory.peek().getPrice()) >= 0){ //
-                    balance = balance.subtract(inventory.get(0).getPrice());
+                if(balance.compareTo(stockSheet.get(selection).get(0).getPrice()) >= 0){ //
+                    balance = balance.subtract(stockSheet.get(selection).get(0).getPrice());
                 }
             }
         }
