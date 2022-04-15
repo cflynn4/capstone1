@@ -1,52 +1,34 @@
 package com.techelevator.view;
 
+import java.math.BigDecimal;
+
 public class Product {
-    private String itemId;
     private String name;
     private String type;
-    private double price;
+    private BigDecimal price;
 
-    public Product(String itemId, String name, String type, double price) {
-        this.itemId = itemId;
+    public Product(String name, BigDecimal price, String type) {
         this.name = name;
         this.type = type;
         this.price = price;
     }
+    public Product(){
 
-
-    public String getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
 
-    public double getPrice() {
+
+    public BigDecimal getPrice() {
         return price;
     }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-
-
 
 }
